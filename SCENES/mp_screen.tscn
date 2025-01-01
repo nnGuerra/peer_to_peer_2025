@@ -67,6 +67,7 @@ text = "JOIN
 "
 
 [node name="Chat" type="VBoxContainer" parent="HBoxContainer" node_paths=PackedStringArray("output", "input")]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("2_ys26g")

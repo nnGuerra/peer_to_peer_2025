@@ -44,12 +44,17 @@ func _on_host_button_button_down() -> void:
 	multiplayer.set_multiplayer_peer(peer)
 	chat.write_output("Hosting.")
 	connection.hide()
+	chat.show()
 
 func _on_join_button_button_down() -> void:
 	if get_user_name() == "":
 		chat.write_output("Connection failed: No username.")
 		return
 	peer = ENetMultiplayerPeer.new()
-	peer.create_client(get_ip_adress(),get_port())
+	var error = peer.create_client(get_ip_adress(),get_port())
+	if error != OK:
+		chat.write_output(str("Can't join.",error))
+		return
 	multiplayer.set_multiplayer_peer(peer)
 	connection.hide()
+	chat.show()
