@@ -23,12 +23,18 @@ func get_port()->int:
 
 func peer_connected(id:int)->void:
 	chat.write_output(str(id," connected!"))
+	if multiplayer.is_server():
+		ConnectionsManager.add_connection(1,get_user_name())
+		ConnectionsManager.add_previous_connections(id)
 
 func peer_disconnected(id:int)->void:
 	chat.write_output(str(id," disconnected."))
+	ConnectionsManager.remove_connection.bind(id)
 
 func connected_to_server()->void:
 	chat.write_output("Connected to server.")
+	var myId = multiplayer.get_unique_id()
+	ConnectionsManager.add_connection.bind(myId,get_user_name()).rpc()
 
 func connection_failed()->void:
 	chat.write_output("Connection failed.")
