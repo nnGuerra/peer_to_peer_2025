@@ -1,3 +1,7 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+Export/peer_to_peer_2025.console.exe
+Export/peer_to_peer_2025.exe
+Export/peer_to_peer_2025.pck
+export_presets.cfg
