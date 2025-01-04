@@ -11,6 +11,7 @@ func _ready() -> void:
 	multiplayer.peer_disconnected.connect(peer_disconnected)
 	multiplayer.connected_to_server.connect(connected_to_server)
 	multiplayer.connection_failed.connect(connection_failed)
+	multiplayer.server_disconnected.connect(server_disconnected)
 
 func get_user_name()->String:
 	return $HBoxContainer/Connection/UserName.text
@@ -30,6 +31,10 @@ func peer_connected(id:int)->void:
 func peer_disconnected(id:int)->void:
 	chat.write_output(str(id," disconnected."))
 	ConnectionsManager.remove_connection.bind(id)
+
+func server_disconnected()->void:
+	chat.write_output("Server disconnected.")
+	chat.hide_input()
 
 func connected_to_server()->void:
 	chat.write_output("Connected to server.")
@@ -53,14 +58,13 @@ func _on_host_button_button_down() -> void:
 	chat.show()
 
 func _on_join_button_button_down() -> void:
-	if get_user_name() == "":
-		chat.write_output("Connection failed: No username.")
-		return
 	peer = ENetMultiplayerPeer.new()
 	var error = peer.create_client(get_ip_adress(),get_port())
 	if error != OK:
 		chat.write_output(str("Can't join.",error))
 		return
 	multiplayer.set_multiplayer_peer(peer)
+	if get_user_name() == "":
+		userName.text = str("User ",multiplayer.get_unique_id())
 	connection.hide()
 	chat.show()
