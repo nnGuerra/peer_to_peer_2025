@@ -1,7 +1,6 @@
 extends Control
 
-@export var chat:Node
-@export var userName:Node
+@export var chat:Chat
 @export var connection:Node
 
 var peer:ENetMultiplayerPeer
@@ -13,19 +12,19 @@ func _ready() -> void:
 	multiplayer.connection_failed.connect(connection_failed)
 	multiplayer.server_disconnected.connect(server_disconnected)
 
-func get_user_name()->String:
-	return $HBoxContainer/Connection/UserName.text
+func get_username()->String:
+	return connection.get_username()
 
 func get_ip_adress()->String:
-	return $HBoxContainer/Connection/IPAddress.text
+	return connection.get_ip_adress()
 
 func get_port()->int:
-	return int($HBoxContainer/Connection/Port.text)
+	return int(connection.get_port())
 
 func peer_connected(id:int)->void:
 	chat.write_output(str(id," connected!"))
 	if multiplayer.is_server():
-		ConnectionsManager.add_connection(1,get_user_name())
+		ConnectionsManager.add_connection(1,get_username())
 		ConnectionsManager.add_previous_connections(id)
 
 func peer_disconnected(id:int)->void:
@@ -39,7 +38,7 @@ func server_disconnected()->void:
 func connected_to_server()->void:
 	chat.write_output("Connected to server.")
 	var myId = multiplayer.get_unique_id()
-	ConnectionsManager.add_connection.bind(myId,get_user_name()).rpc()
+	ConnectionsManager.add_connection.bind(myId,get_username()).rpc()
 
 func connection_failed()->void:
 	chat.write_output("Connection failed.")
@@ -50,8 +49,8 @@ func _on_host_button_button_down() -> void:
 	if error != OK:
 		chat.write_output(str("Host failed: ",error))
 		return
-	if get_user_name() == "":
-		userName.text = "Host"
+	if get_username() == "":
+		connection.set_username("Host")
 	multiplayer.set_multiplayer_peer(peer)
 	chat.write_output("Hosting.")
 	connection.hide()
@@ -64,7 +63,7 @@ func _on_join_button_button_down() -> void:
 		chat.write_output(str("Can't join.",error))
 		return
 	multiplayer.set_multiplayer_peer(peer)
-	if get_user_name() == "":
-		userName.text = str("User ",multiplayer.get_unique_id())
+	if get_username() == "":
+		connection.set_username(str("User ",multiplayer.get_unique_id()))
 	connection.hide()
 	chat.show()

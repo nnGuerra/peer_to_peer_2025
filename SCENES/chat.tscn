@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://bjv2ctj2gvqxd"]
+
+[ext_resource type="Script" path="res://SCENES/chat.gd" id="1_e4327"]
+
+[node name="Chat" type="VBoxContainer" node_paths=PackedStringArray("output", "input")]
+visible = false
+size_flags_horizontal = 3
+script = ExtResource("1_e4327")
+output = NodePath("Output")
+input = NodePath("Input")
+
+[node name="Output" type="RichTextLabel" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+scroll_following = true
+
+[node name="Input" type="LineEdit" parent="."]
+layout_mode = 2
+
+[connection signal="text_submitted" from="Input" to="." method="_on_input_text_submitted"]

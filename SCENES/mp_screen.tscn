@@ -1,9 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://btos6h1wn4w5"]
+[gd_scene load_steps=4 format=3 uid="uid://btos6h1wn4w5"]
 
 [ext_resource type="Script" path="res://SCENES/mp_screen.gd" id="1_j30wm"]
-[ext_resource type="Script" path="res://SCENES/chat.gd" id="2_ys26g"]
+[ext_resource type="PackedScene" uid="uid://jpl3dogotwxc" path="res://SCENES/connection.tscn" id="2_ey52k"]
+[ext_resource type="PackedScene" uid="uid://bjv2ctj2gvqxd" path="res://SCENES/chat.tscn" id="3_fvm5n"]
 
-[node name="MPScreen" type="Control" node_paths=PackedStringArray("chat", "userName", "connection")]
+[node name="MPScreen" type="Control" node_paths=PackedStringArray("chat", "connection")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,7 +13,6 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_j30wm")
 chat = NodePath("HBoxContainer/Chat")
-userName = NodePath("HBoxContainer/Connection/UserName")
 connection = NodePath("HBoxContainer/Connection")
 
 [node name="Panel" type="Panel" parent="."]
@@ -35,53 +35,8 @@ offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Connection" type="VBoxContainer" parent="HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-alignment = 1
-
-[node name="UserName" type="LineEdit" parent="HBoxContainer/Connection"]
-layout_mode = 2
-placeholder_text = "USER NAME"
-alignment = 1
-
-[node name="IPAddress" type="LineEdit" parent="HBoxContainer/Connection"]
-layout_mode = 2
-text = "127.0.0.1"
-placeholder_text = "IP ADRESS"
-alignment = 1
-
-[node name="Port" type="LineEdit" parent="HBoxContainer/Connection"]
-layout_mode = 2
-text = "1234"
-placeholder_text = "PORT"
-alignment = 1
-
-[node name="HostButton" type="Button" parent="HBoxContainer/Connection"]
-layout_mode = 2
-text = "HOST"
-
-[node name="JoinButton" type="Button" parent="HBoxContainer/Connection"]
-layout_mode = 2
-text = "JOIN
-"
-
-[node name="Chat" type="VBoxContainer" parent="HBoxContainer" node_paths=PackedStringArray("output", "input")]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-script = ExtResource("2_ys26g")
-output = NodePath("Output")
-input = NodePath("Input")
-
-[node name="Output" type="RichTextLabel" parent="HBoxContainer/Chat"]
-layout_mode = 2
-size_flags_vertical = 3
-scroll_following = true
-
-[node name="Input" type="LineEdit" parent="HBoxContainer/Chat"]
+[node name="Connection" parent="HBoxContainer" instance=ExtResource("2_ey52k")]
 layout_mode = 2
 
-[connection signal="button_down" from="HBoxContainer/Connection/HostButton" to="." method="_on_host_button_button_down"]
-[connection signal="button_down" from="HBoxContainer/Connection/JoinButton" to="." method="_on_join_button_button_down"]
-[connection signal="text_submitted" from="HBoxContainer/Chat/Input" to="HBoxContainer/Chat" method="_on_input_text_submitted"]
+[node name="Chat" parent="HBoxContainer" instance=ExtResource("3_fvm5n")]
+layout_mode = 2
